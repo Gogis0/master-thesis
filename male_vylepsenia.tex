@@ -1,0 +1,9 @@
+
+\subsection{Further adjustments}
+\begin{itemize}
+    \item \textbf{Balanced discovery draft:} Once we have computed the LDTW scores and classified a sufficient number of reads, we may use use the already labeled reads to draft a discovery sample again, this time with balanced clusters. Given that the accuracy of the already done labeling is very poor, we arrive with a good level of balance. This could allow for a better choice of representatives with minimizing the chance of picking a representative which is actually misclassified.
+    \item \textbf{Iterative classification:} Another approach to increase the sensitivity of the classification phase is to process the whole dataset multiple times with independently sampled representatives. The labels in the iterations may correspond to different permutations of each other, so an extra step has to be performed in which we unify the labelings and subsequently pick a final label for each read according to a certain criteria.
+    \item \textbf{Discovery phase:} In the discovery phase we aim to filter out the low quality squiggles, i. e. squiggles that were incorrectly trimmed by a chance or squiggles containing some artifact which renders them unusable. These squiggles can usually be identified when looking and the alignment matrix: either their scores to all other reads are very high or very low.
+
+    Naturally, one possible way of identifying these ambiguous squiggles would be to measure the overall variance of their alignment scores and drop the squiggles under some variance threshold $\lambda$. The $\lambda$ parameter could be set beforehand or searched for by employing the silhouette score to measure its suitability.
+\end{itemize}

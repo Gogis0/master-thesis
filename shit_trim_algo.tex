@@ -1,0 +1,15 @@
+\begin{algorithm}[H]
+ \KwData{A single sequencing read $\mathcal{R}$, window size $\mathcal{W}$.}
+ \KwResult{The index $i$ at which the blank signal prefix ends.}
+ $N = \FuncSty{len}(\mathcal{R})$\;
+ $variances$ = empty\;
+ $meanVar$ = \FuncSty{mean($variances$)}\;
+ $i = 20$
+ \While{$\mathcal{W} > 5$}{
+    \While{\FuncSty{variance($\mathcal{R_{i,i+\mathcal{W}}}$)  < $0.3 \cdot meanVar$}}{
+            $i$ += $1$\;
+       }
+    $\mathcal{W}$ := $\mathcal{W}$ / $2$\;
+}
+ \caption{How to write algorithms}
+\end{algorithm}

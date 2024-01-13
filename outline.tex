@@ -1,0 +1,37 @@
+\chapter{Problem Setting and Solution Outline}
+
+\label{kap:outline} % id kapitoly pre prikaz ref
+
+In this chapter we outline the characteristic features of our solution. Individual parts of our solution will be described in greater detail in the following chapters.
+
+\section{Problem Setting}
+The problem we are addressing is the DNA barcode demultiplexing from reads in the form of squiggles obtained directly from a nanopore sequencing device. As opposed to the demultiplexing tools mentioned in the previous section, we assume no prior knowledge of the structure of the barcodes, hence we approach the problem in an unsupervised manner of cluster analysis, rather than the supervised classification method of Deepbinner. This gives us the benefit of demultiplexing without the need to re-train our models whenever we employ a new barcoding kit. The I/O interface of our approach is therefore following:
+
+\begin{itemize}
+    \item \textbf{Input:} A set of squiggles $S$, a number of barcode classes $k$
+    \item \textbf{Output:} A partition of $S$ into $k$ sets according to their barcode classes 
+\end{itemize}
+
+As we have no information about the internal structure of the barcode sequences in our problem setting, we need to find a way how to infer the knowledge about barcode classes from the values of the squiggles. Our approach to the problem can be logically separated into two fairly distinct phases that can be approached as problems on their own. The two problems are:
+\begin{enumerate}
+    \item \textbf{Similarity measure:} Find a way to compare the reads in terms of their barcode class
+    \item \textbf{Clustering:} Effectively sorting the reads into bins of barcode classes using this similarity measure
+\end{enumerate}
+
+Part $1$ can be thought of as a close/local perspective, while part $2$ is more of a global one.
+
+\section{Comparison of Reads by Barcode Sequences}
+The first problem that we have to solve is to find whether two reads come from the same barcode class or not. We need to identify the location of the barcode part of the signal and compare it with the corresponding part in the other read with a suitable measure. As the quality of the reads varies, it is important to point out that such measure will be necessarily erroneous, and a measurement of a single pair cannot be taken as a reliable indicator of a barcode match/mismatch.
+
+By having a measure defined for each pair of reads, our effort will be then to compensate for the errors by devising a sufficiently robust method for grouping the reads by the barcode classes in part $2$.
+
+\begin{figure}[!ht]
+    \centering
+    \includegraphics[scale=0.7]{images/barcode_selection.pdf}
+    \caption[Window selection of ends]{The red subsequences resemble barcodes within a (already basecalled) DNA read. Our goal is to select such prefixes and suffixes of the read that are highly likely to contain the barcodes. These window selections will be used for read comparisons.}
+    \label{fig:trim_errors}
+\end{figure}
+
+Once we can compare the squiggles by their barcode classes with sufficient reliability (thus having some sort of a metric space of squiggles), we need to devise a way of dividing the squiggles into barcode classes. We need to take into account the probabilistic nature of such measure, as well as time constraint of such approach as the number of squiggles we need to sort can be as much as several millions. We are therefore left to find a method that sorts the squiggles with sufficient accuracy, but does not use asymptotically large (i.e. $O(N^2)$) number of comparisons.
+
+As we have subdivided our approach in the $2$ parts, we will address the necessary preliminaries as well as on our approach on each of them in its separate chapter in the following text.
